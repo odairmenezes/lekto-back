@@ -64,29 +64,20 @@ public class AuthService : IAuthService
         if (registerDto.Addresses == null || !registerDto.Addresses.Any())
             throw new ArgumentException("Pelo menos um endereço é obrigatório");
 
-        // Por enquanto, vamos criar um usuário fictício para demonstração
-        var user = new UserDto
+        // Criar usuário usando o UserService
+        var createUserDto = new CreateUserDto
         {
-            Id = Guid.NewGuid(),
             FirstName = registerDto.FirstName,
             LastName = registerDto.LastName,
             Cpf = registerDto.Cpf,
             Email = registerDto.Email,
             Phone = registerDto.Phone,
-            IsActive = true,
-            CreatedAt = DateTime.UtcNow,
-            Addresses = registerDto.Addresses.Select(a => new AddressDto
-            {
-                Id = Guid.NewGuid(),
-                Street = a.Street,
-                Complement = a.Complement,
-                City = a.City,
-                State = a.State,
-                ZipCode = a.ZipCode,
-                Country = a.Country,
-                IsPrimary = a.IsPrimary
-            }).ToList()
+            Password = registerDto.Password,
+            ConfirmPassword = registerDto.ConfirmPassword,
+            Addresses = registerDto.Addresses
         };
+
+        var user = await _userService.CreateAsync(createUserDto);
 
         // Gerar tokens
         var token = GenerateToken(user.Id);
