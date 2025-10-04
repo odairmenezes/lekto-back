@@ -1,6 +1,7 @@
 using CadPlus.Data;
 using CadPlus.DTOs;
 using CadPlus.Models;
+using CadPlus.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using CadPlus.Extensions;
 
@@ -15,17 +16,20 @@ public class UserService : IUserService
     private readonly ICpfValidationService _cpfValidationService;
     private readonly IPasswordService _passwordService;
     private readonly ILogger<UserService> _logger;
+    private readonly IAuditService _auditService;
 
     public UserService(
         CadPlusDbContext context,
         ICpfValidationService cpfValidationService,
         IPasswordService passwordService,
-        ILogger<UserService> logger)
+        ILogger<UserService> logger,
+        IAuditService auditService)
     {
         _context = context;
         _cpfValidationService = cpfValidationService;
         _passwordService = passwordService;
         _logger = logger;
+        _auditService = auditService;
     }
 
     public async Task<UserDto?> GetByIdAsync(Guid id)
@@ -178,6 +182,15 @@ public class UserService : IUserService
             throw new KeyNotFoundException($"Usuário com ID {id} não encontrado");
         }
 
+        // Armazenar valores antigos para auditoria
+        var oldValues = new Dictionary<string, string?>
+        {
+            ["FirstName"] = user.FirstName,
+            ["LastName"] = user.LastName,
+            ["Email"] = user.Email,
+            ["Phone"] = user.Phone
+        };
+
         // Validar constraints únicos se necessário
         if (!string.IsNullOrWhiteSpace(updateUserDto.Email) && updateUserDto.Email != user.Email)
         {
@@ -186,33 +199,39 @@ public class UserService : IUserService
 
         // Atualizar campos
         var hasChanges = false;
+        var changes = new Dictionary<string, (string? oldValue, string? newValue)>();
 
         if (!string.IsNullOrWhiteSpace(updateUserDto.FirstName) && updateUserDto.FirstName != user.FirstName)
         {
+            changes["FirstName"] = (user.FirstName, updateUserDto.FirstName.Trim());
             user.FirstName = updateUserDto.FirstName.Trim();
             hasChanges = true;
         }
 
         if (!string.IsNullOrWhiteSpace(updateUserDto.LastName) && updateUserDto.LastName != user.LastName)
         {
+            changes["LastName"] = (user.LastName, updateUserDto.LastName.Trim());
             user.LastName = updateUserDto.LastName.Trim();
             hasChanges = true;
         }
 
         if (!string.IsNullOrWhiteSpace(updateUserDto.Email) && updateUserDto.Email != user.Email)
         {
+            changes["Email"] = (user.Email, updateUserDto.Email.Trim().ToLowerInvariant());
             user.Email = updateUserDto.Email.Trim().ToLowerInvariant();
             hasChanges = true;
         }
 
         if (!string.IsNullOrWhiteSpace(updateUserDto.Phone) && updateUserDto.Phone != user.Phone)
         {
+            changes["Phone"] = (user.Phone, updateUserDto.Phone.Trim());
             user.Phone = updateUserDto.Phone.Trim();
             hasChanges = true;
         }
 
         if (!string.IsNullOrWhiteSpace(updateUserDto.Password))
         {
+            changes["Password"] = ("[HIDDEN]", "[HIDDEN]");
             user.PasswordHash = _passwordService.HashPassword(updateUserDto.Password);
             hasChanges = true;
         }
@@ -221,6 +240,17 @@ public class UserService : IUserService
         {
             user.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
+
+            // Registrar logs de auditoria
+            if (changes.Any())
+            {
+                await _auditService.LogChangesAsync(
+                    id, // Usuário que fez a alteração (auto-alteração)
+                    "User", 
+                    id, // ID da entidade alterada
+                    changes
+                );
+            }
         }
 
         _logger.LogInformation("Usuário atualizado com sucesso - ID: {UserId}", id);

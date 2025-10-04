@@ -656,19 +656,38 @@ public class AddressesController : ControllerBase
         var country = createAddressDto.Country.Trim().ToLower();
         var complement = !string.IsNullOrEmpty(createAddressDto.Complement) ? createAddressDto.Complement.Trim().ToLower() : string.Empty;
 
-        var exists = await _context.Addresses.AnyAsync(a => 
-            a.UserId == userId &&
-            a.Street.ToLower() == street &&
-            ((a.Number ?? string.Empty).ToLower() == number) &&
-            ((a.Neighborhood ?? string.Empty).ToLower() == neighborhood) &&
-            a.City.ToLower() == city &&
-            a.State.ToUpper() == state &&
-            a.ZipCode == zipCode &&
-            a.Country.ToLower() == country &&
-            ((a.Complement == null && string.IsNullOrEmpty(complement)) ||
-             (a.Complement != null && a.Complement.ToLower() == complement)));
+        // Buscar endereços existentes do usuário
+        var existingAddresses = await _context.Addresses
+            .Where(a => a.UserId == userId)
+            .ToListAsync();
 
-        return exists;
+        // Comparar cada endereço existente
+        foreach (var existingAddr in existingAddresses)
+        {
+            var existingStreet = existingAddr.Street?.Trim().ToLower() ?? string.Empty;
+            var existingNumber = existingAddr.Number?.Trim().ToLower() ?? string.Empty;
+            var existingNeighborhood = existingAddr.Neighborhood?.Trim().ToLower() ?? string.Empty;
+            var existingCity = existingAddr.City?.Trim().ToLower() ?? string.Empty;
+            var existingState = existingAddr.State?.Trim().ToUpper() ?? string.Empty;
+            var existingZipCode = existingAddr.ZipCode?.Trim() ?? string.Empty;
+            var existingCountry = existingAddr.Country?.Trim().ToLower() ?? string.Empty;
+            var existingComplement = existingAddr.Complement?.Trim().ToLower() ?? string.Empty;
+
+            // Verificar se todos os campos são iguais
+            if (existingStreet == street &&
+                existingNumber == number &&
+                existingNeighborhood == neighborhood &&
+                existingCity == city &&
+                existingState == state &&
+                existingZipCode == zipCode &&
+                existingCountry == country &&
+                existingComplement == complement)
+            {
+                return true; // Endereço duplicado encontrado
+            }
+        }
+
+        return false; // Nenhum endereço duplicado encontrado
     }
 
     /// <summary>

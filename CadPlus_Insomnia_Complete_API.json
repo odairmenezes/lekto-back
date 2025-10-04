@@ -1,7 +1,7 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2025-10-04T16:40:00.000Z",
+  "__export_date": "2025-10-04T18:52:00.000Z",
   "__export_source": "insomnia.desktop.app:v2023.5.8",
   "resources": [
     {
@@ -22,6 +22,436 @@
         {
           "name": "Content-Type",
           "value": "application/json"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735344000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_list",
+      "parentId": "fld_users",
+      "modified": 1735344000000,
+      "created": 1735344000000,
+      "url": "{{ _.base_url }}/api/users?page=1&limit=10",
+      "name": "👥 Listar Usuários",
+      "description": "Listar usuários com paginação",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "page",
+          "value": "1",
+          "description": "Página",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "10",
+          "description": "Limite por página",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735344000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_create",
+      "parentId": "fld_users",
+      "modified": 1735344000000,
+      "created": 1735344000000,
+      "url": "{{ _.base_url }}/api/users",
+      "name": "➕ Criar Usuário",
+      "description": "Criar novo usuário",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"firstName\": \"João\",\n  \"lastName\": \"Silva\",\n  \"cpf\": \"12345678901\",\n  \"email\": \"joao@exemplo.com\",\n  \"phone\": \"(11) 99999-9999\",\n  \"password\": \"MinhaSenh@123\",\n  \"confirmPassword\": \"MinhaSenh@123\",\n  \"addresses\": [\n    {\n      \"street\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"neighborhood\": \"Centro\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"zipCode\": \"01234-567\",\n      \"country\": \"Brasil\",\n      \"isPrimary\": true\n    }\n  ]\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735344000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_get",
+      "parentId": "fld_users",
+      "modified": 1735344000000,
+      "created": 1735344000000,
+      "url": "{{ _.base_url }}/api/users/{userId}",
+      "name": "👤 Obter Usuário",
+      "description": "Obter usuário por ID",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "userId",
+          "value": "cb18c50e-4e6f-49cb-8dd2-35f8156b85ef",
+          "description": "ID do usuário",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735344000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_users_update",
+      "parentId": "fld_users",
+      "modified": 1735344000000,
+      "created": 1735344000000,
+      "url": "{{ _.base_url }}/api/users/{userId}",
+      "name": "✏️ Atualizar Usuário",
+      "description": "Atualizar dados do usuário",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"firstName\": \"João Atualizado\",\n  \"lastName\": \"Silva Modificado\",\n  \"phone\": \"(11) 88888-8888\"\n}"
+      },
+      "parameters": [
+        {
+          "name": "userId",
+          "value": "cb18c50e-4e6f-49cb-8dd2-35f8156b85ef",
+          "description": "ID do usuário",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735344000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_addresses_list",
+      "parentId": "fld_addresses",
+      "modified": 1735344000000,
+      "created": 1735344000000,
+      "url": "{{ _.base_url }}/api/addresses/users/{userId}",
+      "name": "🏠 Listar Endereços",
+      "description": "Listar endereços de um usuário",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "userId",
+          "value": "cb18c50e-4e6f-49cb-8dd2-35f8156b85ef",
+          "description": "ID do usuário",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735344000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_addresses_create",
+      "parentId": "fld_addresses",
+      "modified": 1735344000000,
+      "created": 1735344000000,
+      "url": "{{ _.base_url }}/api/addresses/users/{userId}",
+      "name": "➕ Criar Endereço",
+      "description": "Adicionar novo endereço ao usuário",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"street\": \"Rua Nova\",\n  \"number\": \"456\",\n  \"neighborhood\": \"Vila Nova\",\n  \"city\": \"São Paulo\",\n  \"state\": \"SP\",\n  \"zipCode\": \"04567-890\",\n  \"country\": \"Brasil\",\n  \"complement\": \"Apto 2\",\n  \"isPrimary\": false\n}"
+      },
+      "parameters": [
+        {
+          "name": "userId",
+          "value": "cb18c50e-4e6f-49cb-8dd2-35f8156b85ef",
+          "description": "ID do usuário",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735344000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_audit_user",
+      "parentId": "fld_audit",
+      "modified": 1735344000000,
+      "created": 1735344000000,
+      "url": "{{ _.base_url }}/api/audit/user/{userId}?page=1&limit=20",
+      "name": "👤 Logs por Usuário",
+      "description": "Buscar logs de auditoria por usuário",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "userId",
+          "value": "cb18c50e-4e6f-49cb-8dd2-35f8156b85ef",
+          "description": "ID do usuário",
+          "disabled": false
+        },
+        {
+          "name": "page",
+          "value": "1",
+          "description": "Página",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "20",
+          "description": "Limite por página",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735344000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_audit_entity",
+      "parentId": "fld_audit",
+      "modified": 1735344000000,
+      "created": 1735344000000,
+      "url": "{{ _.base_url }}/api/audit/entity/{entityType}/{entityId}?page=1&limit=20",
+      "name": "📋 Logs por Entidade",
+      "description": "Buscar logs de auditoria por entidade",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "entityType",
+          "value": "User",
+          "description": "Tipo da entidade (User, Address)",
+          "disabled": false
+        },
+        {
+          "name": "entityId",
+          "value": "cb18c50e-4e6f-49cb-8dd2-35f8156b85ef",
+          "description": "ID da entidade",
+          "disabled": false
+        },
+        {
+          "name": "page",
+          "value": "1",
+          "description": "Página",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "20",
+          "description": "Limite por página",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735344000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_audit_period",
+      "parentId": "fld_audit",
+      "modified": 1735344000000,
+      "created": 1735344000000,
+      "url": "{{ _.base_url }}/api/audit/period?startDate=2025-01-01&endDate=2025-12-31&page=1&limit=20",
+      "name": "📅 Logs por Período",
+      "description": "Buscar logs de auditoria por período",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "startDate",
+          "value": "2025-01-01",
+          "description": "Data inicial (YYYY-MM-DD)",
+          "disabled": false
+        },
+        {
+          "name": "endDate",
+          "value": "2025-12-31",
+          "description": "Data final (YYYY-MM-DD)",
+          "disabled": false
+        },
+        {
+          "name": "page",
+          "value": "1",
+          "description": "Página",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "20",
+          "description": "Limite por página",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1735344000000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_audit_action",
+      "parentId": "fld_audit",
+      "modified": 1735344000000,
+      "created": 1735344000000,
+      "url": "{{ _.base_url }}/api/audit/action/{fieldName}?page=1&limit=20",
+      "name": "🔍 Logs por Campo",
+      "description": "Buscar logs de auditoria por campo/ação",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "fieldName",
+          "value": "FirstName",
+          "description": "Nome do campo (FirstName, Email, Phone, etc.)",
+          "disabled": false
+        },
+        {
+          "name": "page",
+          "value": "1",
+          "description": "Página",
+          "disabled": false
+        },
+        {
+          "name": "limit",
+          "value": "20",
+          "description": "Limite por página",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.auth_token }}"
         }
       ],
       "authentication": {},
@@ -64,8 +494,8 @@
       "modified": 1735344000000,
       "created": 1735344000000,
       "url": "{{ _.base_url }}/api/startup/init",
-      "name": "🚀 Inicializar Banco",
-      "description": "Inicializar banco de dados com dados básicos",
+      "name": "🚀 Inicializar Sistema",
+      "description": "Inicializar banco de dados e criar usuário admin",
       "method": "POST",
       "body": {},
       "parameters": [],
@@ -82,394 +512,13 @@
       "_type": "request"
     },
     {
-      "_id": "req_startup_add_test_user",
+      "_id": "req_health",
       "parentId": "fld_system",
       "modified": 1735344000000,
       "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/startup/add-test-user",
-      "name": "👤 Criar Usuário Teste",
-      "description": "Criar usuário de teste para desenvolvimento",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"firstName\": \"João\",\n  \"lastName\": \"Silva\",\n  \"email\": \"joao.silva@teste.com\",\n  \"cpf\": \"11122233344\",\n  \"phone\": \"(11) 99999-8888\",\n  \"password\": \"Teste123!\",\n  \"addresses\": [\n    {\n      \"street\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"neighborhood\": \"Centro\",\n      \"complement\": \"Apto 45\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"zipCode\": \"01234-567\",\n      \"country\": \"Brasil\",\n      \"isPrimary\": true\n    }\n  ]\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_users_list",
-      "parentId": "fld_users",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/users",
-      "name": "👥 Listar Usuários",
-      "description": "Listar todos os usuários com paginação",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "name": "page",
-          "value": "1",
-          "description": "Página para paginação",
-          "disabled": false
-        },
-        {
-          "name": "limit",
-          "value": "10",
-          "description": "Limite de registros por página",
-          "disabled": false
-        },
-        {
-          "name": "search",
-          "value": "",
-          "description": "Termo de busca por nome ou email",
-          "disabled": true
-        }
-      ],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_users_get",
-      "parentId": "fld_users",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/users/{{ _.user_id }}",
-      "name": "👤 Obter Usuário",
-      "description": "Buscar usuário específico por ID",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_users_create",
-      "parentId": "fld_users",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/users",
-      "name": "➕ New User (Postman Import)",
-      "description": "Create a new user with comprehensive address data",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"firstName\": \"Maria\",\n  \"lastName\": \"Santos\",\n  \"email\": \"maria.santos@hospital.com\",\n  \"cpf\": \"98765432100\",\n  \"phone\": \"(21) 98765-4321\",\n  \"password\": \"MinhaSenh@123\",\n  \"confirmPassword\": \"MinhaSenh@123\",\n  \"addresses\": [\n    {\n      \"street\": \"Avenida Paulista\",\n      \"number\": \"1000\",\n      \"neighborhood\": \"Bela Vista\",\n      \"complement\": \"Sala 203\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"zipCode\": \"01310-100\",\n      \"country\": \"Brasil\",\n      \"isPrimary\": true\n    }\n  ]\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        },
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_users_update",
-      "parentId": "fld_users",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/users/{{ _.user_id }}",
-      "name": "✏️ Atualizar Usuário",
-      "description": "Atualizar dados de um usuário existente",
-      "method": "PUT",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"firstName\": \"João Carlos\",\n  \"lastName\": \"Silva Santos\",\n  \"phone\": \"(11) 98765-4321\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        },
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies see": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_addresses_list",
-      "parentId": "fld_addresses",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/addresses/users/{{ _.user_id }}",
-      "name": "🏠 Listar Endereços",
-      "description": "Listar todos os endereços de um usuário",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_addresses_get",
-      "parentId": "fld_addresses",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/addresses/{{ _.address_id }}",
-      "name": "📍 Obter Endereço",
-      "description": "Buscar endereço específico por ID",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_addresses_create",
-      "parentId": "fld_addresses",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/addresses/users/{{ _.user_id }}",
-      "name": "➕ Criar Endereço",
-      "description": "Adicionar novo endereço para um usuário",
-      "method": "POST",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"street\": \"Rua das Flores\",\n  \"number\": \"123\",\n  \"neighborhood\": \"Centro\",\n  \"complement\": \"Apto 45\",\n  \"city\": \"São Paulo\",\n  \"state\": \"SP\",\n  \"zipCode\": \"01234-567\",\n  \"country\": \"Brasil\",\n  \"isPrimary\": false\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        },
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_addresses_update",
-      "parentId": "fld_addresses",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/addresses/{{ _.address_id }}",
-      "name": "✏️ Atualizar Endereço",
-      "description": "Atualizar endereço existente",
-      "method": "PUT",
-      "body": {
-        "mimeType": "application/json",
-        "text": "{\n  \"number\": \"456\",\n  \"neighborhood\": \"Jardim Paulista\",\n  \"complement\": \"Bloco B\"\n}"
-      },
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Content-Type",
-          "value": "application/json"
-        },
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_addresses_delete",
-      "parentId": "fld_addresses",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/addresses/{{ _.address_id }}",
-      "name": "🗑️ Remover Endereço",
-      "description": "Remover endereço (apenas se não for o último)",
-      "method": "DELETE",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_addresses_set_primary",
-      "parentId": "fld_addresses",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/addresses/{{ _.address_id }}/set-primary",
-      "name": "⭐ Definir Principal",
-      "description": "Definir endereço como principal",
-      "method": "POST",
-      "body": {},
-      "parameters": [],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_swagger",
-      "parentId": "fld_system",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/swagger",
-      "name": "📚 Swagger Documentation",
-      "description": "Documentação interativa da API",
-      "method": "GET",
-      "body": {},
-      "parameters": [],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_openapi",
-      "parentId": "fld_system",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/openapi/v1.json",
-      "name": "📋 OpenAPI Spec",
-      "description": "Especificação OpenAPI em JSON",
+      "url": "{{ _.base_url }}/health",
+      "name": "💚 Health Check",
+      "description": "Verificar saúde da aplicação",
       "method": "GET",
       "body": {},
       "parameters": [],
@@ -502,7 +551,7 @@
       "parentId": "wrk_cadplus_api",
       "modified": 1735344000000,
       "created": 1735344000000,
-      "name": "👤 Sistema",
+      "name": "👤 Usuários",
       "description": "Gestão completa de usuários",
       "environment": {},
       "environmentPropertyOrder": null,
@@ -516,6 +565,18 @@
       "created": 1735344000000,
       "name": "🏠 Endereços",
       "description": "Gestão de endereços dos usuários",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1735344000000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_audit",
+      "parentId": "wrk_cadplus_api",
+      "modified": 1735344000000,
+      "created": 1735344000000,
+      "name": "📊 Auditoria",
+      "description": "Logs de auditoria e rastreabilidade",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": -1735344000000,
@@ -538,8 +599,8 @@
       "parentId": null,
       "modified": 1735344000000,
       "created": 1735344000000,
-      "name": "🚀 CadPlus ERP API",
-      "description": "Coleção completa da API CadPlus ERP - Sistema de cadastro hospitalar",
+      "name": "🚀 CadPlus ERP - API Completa",
+      "description": "API REST completa do CadPlus ERP com sistema de auditoria",
       "scope": "collection",
       "_type": "workspace"
     },
@@ -551,16 +612,12 @@
       "name": "Base Environment",
       "data": {
         "base_url": "http://localhost:7001",
-        "auth_token": "",
-        "user_id": "",
-        "address_id": ""
+        "auth_token": ""
       },
       "dataPropertyOrder": {
         "&": [
           "base_url",
-          "auth_token",
-          "user_id",
-          "address_id"
+          "auth_token"
         ]
       },
       "color": null,

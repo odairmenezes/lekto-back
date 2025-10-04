@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using FluentValidation;
 using CadPlus.Services;
+using CadPlus.Services.Interfaces;
 using CadPlus.Services.Implementations;
 using CadPlus.DTOs;
 using CadPlus.Validators;
@@ -66,6 +67,33 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// Configuração de CORS
+var allowedOrigins = EnvironmentExtensions.GetEnvironmentVariableOrDefault("ALLOWED_ORIGINS", "*");
+var corsOrigins = allowedOrigins.Split(",", StringSplitOptions.RemoveEmptyEntries)
+                    .Select(origin => origin.Trim())
+                    .ToArray();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CadPlusPolicy", policy =>
+    {
+        if (corsOrigins.Contains("*"))
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        }
+        else
+        {
+            policy.WithOrigins(corsOrigins)
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .SetIsOriginAllowed(origin => true)
+                  .AllowCredentials();
+        }
+    });
+});
+
 builder.Services.AddAuthorization();
 
 // Registros de interfaces e serviços
@@ -73,6 +101,7 @@ builder.Services.AddScoped<IAuthService, CadPlus.Services.Implementations.AuthSe
 builder.Services.AddScoped<IUserService, CadPlus.Services.Implementations.UserService>();
 builder.Services.AddScoped<IPasswordService, CadPlus.Services.Implementations.PasswordService>();
 builder.Services.AddScoped<ICpfValidationService, CadPlus.Services.Implementations.CpfValidationService>();
+builder.Services.AddScoped<IAuditService, CadPlus.Services.Implementations.AuditService>();
 
 // FluentValidation
 builder.Services.AddScoped<IValidator<LoginDto>, LoginValidator>();
@@ -99,6 +128,9 @@ var app = builder.Build();
 
 // Configure pipeline
 app.UseRouting();
+
+// Habilitar CORS
+app.UseCors("CadPlusPolicy");
 
 // Middleware de logging customizado temporariamente comentado para debug
 // app.UseMiddleware<CadPlus.Middleware.RequestLoggingMiddleware>();

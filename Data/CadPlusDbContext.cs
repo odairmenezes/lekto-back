@@ -172,6 +172,21 @@ public class CadPlusDbContext : DbContext
             entity.HasIndex(a => new { a.UserId, a.IsPrimary })
                   .HasFilter("[IsPrimary] = 1")
                   .HasDatabaseName("IX_Addresses_UniquePrimaryPerUser");
+
+            // Restrição: evitar endereços duplicados para o mesmo usuário
+            entity.HasIndex(a => new { 
+                a.UserId, 
+                a.Street, 
+                a.Number, 
+                a.Neighborhood, 
+                a.City, 
+                a.State, 
+                a.ZipCode, 
+                a.Country, 
+                a.Complement 
+            })
+            .HasDatabaseName("IX_Addresses_UniqueAddressPerUser")
+            .IsUnique();
         });
     }
 

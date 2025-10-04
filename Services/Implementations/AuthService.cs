@@ -18,10 +18,10 @@ public class AuthService : IAuthService
     private readonly IPasswordService _passwordService;
     private readonly IUserService _userService;
     
-    // JWT Settings - Hard-coded for simplicity
-    private readonly string _jwtSecret = "CadPlus_Super_Secret_Key_Minimum_256_Bits_Development_Only_Safe_Key_12345678";
-    private readonly string _jwtIssuer = "CadPlus-ERP";
-    private readonly string _jwtAudience = "CadPlus-Frontend";
+    // JWT Settings - Usando configurações de ambiente
+    private readonly string _jwtSecret;
+    private readonly string _jwtIssuer;
+    private readonly string _jwtAudience;
 
     public AuthService(
         ICpfValidationService cpfValidationService,
@@ -31,6 +31,11 @@ public class AuthService : IAuthService
         _cpfValidationService = cpfValidationService;
         _passwordService = passwordService;
         _userService = userService;
+        
+        // Carregar configurações JWT do ambiente
+        _jwtSecret = EnvironmentExtensions.GetEnvironmentVariableOrDefault("JWT_SECRET_KEY", "CadPlus_Super_Secret_Key_Minimum_256_Bits_Development_Only_Safe_Key_12345678");
+        _jwtIssuer = EnvironmentExtensions.GetEnvironmentVariableOrDefault("JWT_ISSUER", "CadPlusERP");
+        _jwtAudience = EnvironmentExtensions.GetEnvironmentVariableOrDefault("JWT_AUDIENCE", "CadPlusFrontend");
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto)

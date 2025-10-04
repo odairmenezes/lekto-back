@@ -34,6 +34,9 @@ O CadPlus ERP é comercializado por módulos independentes, sendo o módulo de c
 - **Rastreabilidade**: Log completo de todas as alterações realizadas
 - **Histórico detalhado**: Registro "de → para" de cada campo modificado
 - **Compliance**: Auditoria preparada para normas regulamentárias
+- **Busca avançada**: Filtros por usuário, entidade, período e campo
+- **API dedicada**: Endpoints específicos para consulta de logs
+- **Paginação**: Navegação eficiente em grandes volumes de dados
 
 ## 🛠️ Stack Tecnológica
 
@@ -448,6 +451,61 @@ Authorization: Bearer {token}
       "isPrimary": true
     }
   ]
+}
+```
+
+### 📊 Auditoria e Logs
+
+#### Buscar logs por usuário
+```http
+GET /api/audit/user/{userId}?page=1&limit=20
+Authorization: Bearer {token}
+```
+
+#### Buscar logs por entidade
+```http
+GET /api/audit/entity/{entityType}/{entityId}?page=1&limit=20
+Authorization: Bearer {token}
+```
+
+#### Buscar logs por período
+```http
+GET /api/audit/period?startDate=2025-01-01&endDate=2025-12-31&page=1&limit=20
+Authorization: Bearer {token}
+```
+
+#### Buscar logs por campo/ação
+```http
+GET /api/audit/action/{fieldName}?page=1&limit=20
+Authorization: Bearer {token}
+```
+
+**Exemplo de resposta:**
+```json
+{
+  "success": true,
+  "message": "Logs de auditoria recuperados com sucesso",
+  "data": {
+    "logs": [
+      {
+        "id": "0fa704df-1b11-4e7c-9749-cdf7544e2db9",
+        "userId": "cb18c50e-4e6f-49cb-8dd2-35f8156b85ef",
+        "entityType": "User",
+        "entityId": "cb18c50e-4e6f-49cb-8dd2-35f8156b85ef",
+        "fieldName": "FirstName",
+        "oldValue": "Administrador",
+        "newValue": "Administrador Atualizado",
+        "changedAt": "2025-10-04T18:51:42.8661567",
+        "changedBy": "cb18c50e-4e6f-49cb-8dd2-35f8156b85ef",
+        "ipAddress": null,
+        "userAgent": null
+      }
+    ],
+    "totalCount": 3,
+    "currentPage": 1,
+    "totalPages": 1,
+    "itemsPerPage": 20
+  }
 }
 ```
 
