@@ -1,0 +1,46 @@
+# Diretórios que não devem ser copiados para o Docker
+**/.git**
+**/.github**
+**/bin/**
+**/obj/**
+**/logs/**
+**/Tests/**
+**/.vs/**
+**/.vscode/**
+**/node_modules/**
+**/packages/**
+
+# Arquivos de desenvolvimento
+**/.env
+**/.env.local
+**/.env.development
+**/.env.test
+**/.userprefs
+**/Thumbs.db
+
+# Arquivos temporários
+**/*.tmp
+**/*.temp
+**/*.swp
+**/*.swo
+**/*~
+**/*.pid
+
+# Documentação desnecessária para produção
+**/*.md
+**/README*
+**/LICENSE*
+**/CHANGELOG*
+
+# Scripts de desenvolvimento
+**/run-api.sh
+**/run-tests.sh
+**/start-api-http.sh
+**/diagnostic.sh
+
+# Arquivos específicos de IDE
+**/.vs/
+**/.vscode/
+**/*.user
+**/*.suo
+

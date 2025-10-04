@@ -1,0 +1,407 @@
+# ==================================================================
+# CadPlus ERP - .gitignore
+# ==================================================================
+# Este arquivo define quais arquivos e diretórios devem ser ignorados
+# pelo Git durante o controle de versão.
+
+# ==================================================================
+# 🔧 .NET CORE / ASP.NET CORE
+# ==================================================================
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio cache/options directory
+.vs/
+
+# Visual Studio Code cache directory
+.vscode/
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+
+# Visual Studio Trace Files
+*.e2e
+
+# TFS 2012 Local Workspace
+$tf/
+
+# Guidance Automation Toolkit
+*.gpState
+
+# ReSharper is a .NET coding add-in
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific files (MonoDevelop/Xamarin Studio)
+*.userprefs
+
+# Mono auto generated files
+mono_crash.*
+
+# Build Results of an ATL Project
+[Dd]ebugPS/
+[Rr]eleasePS/
+dlldata.c
+
+# Benchmark Results
+BenchmarkDotNet.Artifacts/
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# StyleCop
+StyleCopReport.xml
+
+# Files built by Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.tlog
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# ==================================================================
+# 🗄️ BANCO DE DADOS
+# ==================================================================
+
+# Arquivos de banco SQLite
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Diretório de dados do projeto
+data/
+!data/.gitkeep
+
+# Logs de banco de dados
+*.ldb
+*.log
+
+# ==================================================================
+# 🔐 ARQUIVOS DE CONFIGURAÇÃO E SENSÍVEIS
+# ==================================================================
+
+# Arquivos de configuração local
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Arquivos de appsettings específicos de ambiente (exceto template)
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
+appsettings.Test.json
+
+# Configurações de IDE específicas
+*.suo.user
+*.user
+*.lock.json
+
+# Arquivos de deployment específicos
+*.dockerconfig
+docker-config.json
+
+# Certificados e chaves
+*.pfx
+*.p12
+*.key
+*.crt
+*.cer
+ssl/
+certs/
+
+# Configurações de ambiente específicas
+bin/Debug/
+bin/Release/
+Properties/launchSettings.json
+
+# ==================================================================
+# 📝 LOGS E TEMPORÁRIOS
+# ==================================================================
+
+# Diretório de logs
+logs/
+log/
+*.log
+
+# Arquivos temporários
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# ==================================================================
+# 🧪 TESTES E RELATÓRIOS
+# ==================================================================
+
+# Diretórios de teste
+test-results/
+TestResults/
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Relatórios de cobertura
+coverage/
+*.coverage
+*.coveragexml
+
+# Arquivos de teste temporários
+*TestResult.xml
+*.trx
+*.trx.user
+
+# MSTest test results
+TestResults/
+
+# ==================================================================
+# 💻 SISTEMA OPERACIONAL
+# ==================================================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ==================================================================
+# 🐳 DOCKER
+# ==================================================================
+
+# Arquivos Docker específicos do ambiente
+docker-compose.override.yml
+.env.docker
+
+# Volume mounts locais
+docker-data/
+
+# ==================================================================
+# 📦 PACKAGES E DEPENDÊNCIAS
+# ==================================================================
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+!**/packages/repositories.config
+
+# Node.js (caso seja necessário para algum tooling)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Especificações do Bower
+bower_components/
+
+# ==================================================================
+# 🔧 FERRAMENTAS DE DESENVOLVIMENTO
+# ==================================================================
+
+# Arquivos de backup
+*.orig
+*.backup
+*.bak
+*.sav
+
+# Arquivos de desenvolvimento locais
+*.user.cs
+*.user.vb
+
+# Arquivos gerados automaticamente
+*.generated.cs
+*.g.cs
+*.designer.cs
+
+# Arquivos de minificação
+*.min.js
+*.min.css
+
+# ==================================================================
+# 📚 DOCUMENTAÇÃO TEMPORÁRIA
+# ==================================================================
+
+# Arquivos de documentação temporários
+docs/temp/
+temp-docs/
+*.tmp.md
+
+# ==================================================================
+# 🏥 ESPECÍFICOS DO CADPLUS ERP
+# ==================================================================
+
+# Arquivos específicos do sistema hospitalar
+uploads/
+patient-data/
+reports/
+exports/
+
+# Configurações de hospital específicas
+hospital-config/
+facilities-config/
+
+# Backup de dados sensíveis
+*backup*
+*_backup*
+
+# Arquivos de desenvolvimento específicos
+dev-scripts/
+local-config/
+
+# ==================================================================
+# 🎯 ARQUIVOS INCLUÍDOS NO PROJETO
+# ==================================================================
+
+# Manter estes arquivos importantes
+!.gitkeep
+!README.md
+!.env.example
+!docker-compose.yml
+!Dockerfile
+!.dockerignore
+!run-api.sh
+!docs/
+!.github/
+
+# Arquivos de configuração importantes
+!appsettings.json
+!appsettings.Development.json
+
+# ==================================================================
+# 🔄 EXEMPLOS DE CONFIGURAÇÕES LOCAIS
+# ==================================================================
+
+# Para incluir um arquivo exemplo de configuração específica
+config/
+
+# Para manter templates de configuração
+!*.example.*
+!*.template.*
+!*.sample.*
+
+# ==================================================================
+# 📋 RESUMO DAS REGRAS
+# ==================================================================
+# 
+# ✅ INCLUÍDO NO PROJETO:
+# - Todo código fonte (.cs, .csproj, .sln)
+# - Documentação (README.md, docs/)
+# - Templates de configuração (.env.example, *.example.*)
+# - Scripts utilitários (run-api.sh)
+# - Configurações Docker
+# - Arquivos de configuração de desenvolvimento
+# 
+# ❌ EXCLUÍDO DO PROJETO:
+# - Arquivos de build (bin/, obj/)
+# - Configurações locais (.env, appsettings.production.json)
+# - Logs e arquivos temporários
+# - Dados de banco SQLite
+# - Arquivos de certificados/chaves
+# - Cache de IDEs
+# - Resultados de testes
+# - Uploads e dados sensíveis do sistema hospitalar
+#
+# ==================================================================
+
+

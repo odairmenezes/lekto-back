@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  cadplus-api:
+    build: .
+    ports:
+      - "${API_PORT:-7001}:7001"
+    environment:
+      # Configurações da aplicação
+      - API_PORT=7001
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
+      
+      # Configurações do banco de dados SQLite
+      - DATABASE_CONNECTION_STRING=Data Source=/app/data/CadPlusDb_Prod.db
+      - DATABASE_NAME=CadPlusDb_Prod
+      
+      # Configurações de segurança
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-CadPlus_Super_Secret_Key_Minimum_256_Bits_For_Security_Purposes}
+      - JWT_ISSUER=${JWT_ISSUER:-CadPlusERP}
+      - JWT_AUDIENCE=${JWT_AUDIENCE:-CadPlusFrontend}
+      
+      # Configurações de logging
+      - LOG_LEVEL=${LOG_LEVEL:-Information}
+      
+      # Configurações do sistema
+      - ENABLE_SWAGGER=${ENABLE_SWAGGER:-true}
+      - ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS:-true}
+      
+      # Configurações de CORS
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:4200,http://localhost:3000}
+      
+    volumes:
+      # Persistir dados do SQLite
+      - ./data:/app/data
+      - ./logs:/app/logs
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  default:
+    name: cadplus-network
+
