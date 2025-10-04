@@ -122,7 +122,7 @@ public class UserProfile : Profile
             .ForMember(dest => dest.CreatedAt, opt => opt.Ignore());
 
         // AuditLog -> AuditLogDto (se necessário no futuro)
-        CreateMap<AuditLog, object>() // Placeholder para futuras implementações
+        CreateMap<AuditLog, object>() // Mapeamento para logs de auditoria
             .ForMember(dest => dest.ToString(), opt => opt.Ignore());
     }
 
@@ -140,18 +140,15 @@ public class UserProfile : Profile
     }
 
     /// <summary>
-    /// Resolver para hash de senha (placeholder - seria injetado real HashService)
+    /// Resolver para hash de senha usando BCrypt
     /// </summary>
     /// <param name="password">Senha em texto plano</param>
     /// <returns>Hash da senha</returns>
     private static string HashPassword(string password)
     {
-        // IMPORTANTE: Em produção, isso deveria ser injetado como dependência
-        // Por enquanto, retornamos um placeholder
         if (string.IsNullOrWhiteSpace(password))
             throw new ArgumentException("Password não pode ser vazio", nameof(password));
 
-        // Implementação temporária - deveria usar IPasswordService
-        return $"HASHED_{password}"; // Placeholder
+        return BCrypt.Net.BCrypt.HashPassword(password);
     }
 }

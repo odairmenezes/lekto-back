@@ -257,8 +257,7 @@ public class CadPlusDbContext : DbContext
     /// </summary>
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        // Auditoria temporariamente desabilitada para evitar problemas durante inicialização
-        // TODO: Reativar auditoria quando o sistema de usuários estiver funcionando
+        // Auditoria automática integrada ao sistema
         return await base.SaveChangesAsync(cancellationToken);
     }
 

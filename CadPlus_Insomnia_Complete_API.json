@@ -87,7 +87,7 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n  \"firstName\": \"João\",\n  \"lastName\": \"Silva\",\n  \"cpf\": \"12345678901\",\n  \"email\": \"joao@exemplo.com\",\n  \"phone\": \"(11) 99999-9999\",\n  \"password\": \"MinhaSenh@123\",\n  \"confirmPassword\": \"MinhaSenh@123\",\n  \"addresses\": [\n    {\n      \"street\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"neighborhood\": \"Centro\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"zipCode\": \"01234-567\",\n      \"country\": \"Brasil\",\n      \"isPrimary\": true\n    }\n  ]\n}"
+        "text": "{\n  \"firstName\": \"Maria\",\n  \"lastName\": \"Santos\",\n  \"cpf\": \"98765432100\",\n  \"email\": \"maria.santos@empresa.com\",\n  \"phone\": \"(11) 98765-4321\",\n  \"password\": \"MinhaSenh@456\",\n  \"confirmPassword\": \"MinhaSenh@456\",\n  \"addresses\": [\n    {\n      \"street\": \"Av. Paulista\",\n      \"number\": \"1000\",\n      \"neighborhood\": \"Bela Vista\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"zipCode\": \"01310-100\",\n      \"country\": \"Brasil\",\n      \"isPrimary\": true\n    }\n  ]\n}"
       },
       "parameters": [],
       "headers": [
