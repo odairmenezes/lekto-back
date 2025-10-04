@@ -25,175 +25,35 @@ public class AuditController : ControllerBase
     }
 
     /// <summary>
-    /// Busca logs de auditoria por usuário
+    /// Busca logs de auditoria por CPF do usuário
     /// </summary>
-    /// <param name="userId">ID do usuário</param>
+    /// <param name="cpf">CPF do usuário</param>
     /// <param name="page">Página (padrão: 1)</param>
     /// <param name="limit">Limite por página (padrão: 20)</param>
-    [HttpGet("user/{userId}")]
-    public async Task<ActionResult<ApiResponse<AuditLogResponseDto>>> GetLogsByUser(
-        Guid userId, 
+    [HttpGet("cpf/{cpf}")]
+    [ProducesResponseType(typeof(ApiResponse<AuditLogResponseDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<ApiResponse<AuditLogResponseDto>>> GetLogsByCpf(
+        string cpf, 
         [FromQuery] int page = 1, 
         [FromQuery] int limit = 20)
     {
         try
         {
-            if (page < 1) page = 1;
-            if (limit < 1 || limit > 100) limit = 20;
-
-            var (logs, totalCount) = await _auditService.GetLogsByUserAsync(userId, page, limit);
-            
-            var response = new AuditLogResponseDto
-            {
-                Logs = logs.Select(MapToDto).ToList(),
-                TotalCount = totalCount,
-                CurrentPage = page,
-                TotalPages = (int)Math.Ceiling((double)totalCount / limit),
-                ItemsPerPage = limit
-            };
-
-            return Ok(new ApiResponse<AuditLogResponseDto>
-            {
-                Success = true,
-                Message = "Logs de auditoria recuperados com sucesso",
-                Data = response
-            });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error getting audit logs for user {UserId}", userId);
-            return StatusCode(500, new ApiResponse<object>
-            {
-                Success = false,
-                Message = "Erro interno do servidor",
-                Errors = new List<string> { ex.Message }
-            });
-        }
-    }
-
-    /// <summary>
-    /// Busca logs de auditoria por entidade
-    /// </summary>
-    /// <param name="entityType">Tipo da entidade</param>
-    /// <param name="entityId">ID da entidade</param>
-    /// <param name="page">Página (padrão: 1)</param>
-    /// <param name="limit">Limite por página (padrão: 20)</param>
-    [HttpGet("entity/{entityType}/{entityId}")]
-    public async Task<ActionResult<ApiResponse<AuditLogResponseDto>>> GetLogsByEntity(
-        string entityType, 
-        Guid entityId, 
-        [FromQuery] int page = 1, 
-        [FromQuery] int limit = 20)
-    {
-        try
-        {
-            if (page < 1) page = 1;
-            if (limit < 1 || limit > 100) limit = 20;
-
-            var (logs, totalCount) = await _auditService.GetLogsByEntityAsync(entityType, entityId, page, limit);
-            
-            var response = new AuditLogResponseDto
-            {
-                Logs = logs.Select(MapToDto).ToList(),
-                TotalCount = totalCount,
-                CurrentPage = page,
-                TotalPages = (int)Math.Ceiling((double)totalCount / limit),
-                ItemsPerPage = limit
-            };
-
-            return Ok(new ApiResponse<AuditLogResponseDto>
-            {
-                Success = true,
-                Message = "Logs de auditoria recuperados com sucesso",
-                Data = response
-            });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error getting audit logs for entity {EntityType}/{EntityId}", entityType, entityId);
-            return StatusCode(500, new ApiResponse<object>
-            {
-                Success = false,
-                Message = "Erro interno do servidor",
-                Errors = new List<string> { ex.Message }
-            });
-        }
-    }
-
-    /// <summary>
-    /// Busca logs de auditoria por período
-    /// </summary>
-    /// <param name="startDate">Data inicial</param>
-    /// <param name="endDate">Data final</param>
-    /// <param name="page">Página (padrão: 1)</param>
-    /// <param name="limit">Limite por página (padrão: 20)</param>
-    [HttpGet("period")]
-    public async Task<ActionResult<ApiResponse<AuditLogResponseDto>>> GetLogsByPeriod(
-        [FromQuery] DateTime startDate, 
-        [FromQuery] DateTime endDate, 
-        [FromQuery] int page = 1, 
-        [FromQuery] int limit = 20)
-    {
-        try
-        {
-            if (page < 1) page = 1;
-            if (limit < 1 || limit > 100) limit = 20;
-            if (startDate > endDate)
+            if (string.IsNullOrWhiteSpace(cpf))
                 return BadRequest(new ApiResponse<object>
                 {
                     Success = false,
-                    Message = "Data inicial não pode ser maior que a data final",
-                    Errors = new List<string> { "Período inválido" }
+                    Message = "CPF é obrigatório",
+                    Errors = new List<string> { "CPF não pode ser vazio" }
                 });
 
-            var (logs, totalCount) = await _auditService.GetLogsByPeriodAsync(startDate, endDate, page, limit);
-            
-            var response = new AuditLogResponseDto
-            {
-                Logs = logs.Select(MapToDto).ToList(),
-                TotalCount = totalCount,
-                CurrentPage = page,
-                TotalPages = (int)Math.Ceiling((double)totalCount / limit),
-                ItemsPerPage = limit
-            };
-
-            return Ok(new ApiResponse<AuditLogResponseDto>
-            {
-                Success = true,
-                Message = "Logs de auditoria recuperados com sucesso",
-                Data = response
-            });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error getting audit logs for period {StartDate} to {EndDate}", startDate, endDate);
-            return StatusCode(500, new ApiResponse<object>
-            {
-                Success = false,
-                Message = "Erro interno do servidor",
-                Errors = new List<string> { ex.Message }
-            });
-        }
-    }
-
-    /// <summary>
-    /// Busca logs de auditoria por ação
-    /// </summary>
-    /// <param name="fieldName">Nome do campo alterado</param>
-    /// <param name="page">Página (padrão: 1)</param>
-    /// <param name="limit">Limite por página (padrão: 20)</param>
-    [HttpGet("action/{fieldName}")]
-    public async Task<ActionResult<ApiResponse<AuditLogResponseDto>>> GetLogsByAction(
-        string fieldName, 
-        [FromQuery] int page = 1, 
-        [FromQuery] int limit = 20)
-    {
-        try
-        {
             if (page < 1) page = 1;
             if (limit < 1 || limit > 100) limit = 20;
 
-            var (logs, totalCount) = await _auditService.GetLogsByActionAsync(fieldName, page, limit);
+            var (logs, totalCount) = await _auditService.GetLogsByCpfAsync(cpf, page, limit);
             
             var response = new AuditLogResponseDto
             {
@@ -213,40 +73,7 @@ public class AuditController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error getting audit logs for action {FieldName}", fieldName);
-            return StatusCode(500, new ApiResponse<object>
-            {
-                Success = false,
-                Message = "Erro interno do servidor",
-                Errors = new List<string> { ex.Message }
-            });
-        }
-    }
-
-    /// <summary>
-    /// Busca logs de auditoria com filtros múltiplos
-    /// </summary>
-    /// <param name="search">Parâmetros de busca</param>
-    [HttpPost("search")]
-    public ActionResult<ApiResponse<AuditLogResponseDto>> SearchLogs([FromBody] AuditLogSearchDto search)
-    {
-        try
-        {
-            if (search.Page < 1) search.Page = 1;
-            if (search.Limit < 1 || search.Limit > 100) search.Limit = 20;
-
-            // Implementar busca com filtros múltiplos
-            // Por enquanto, retornar erro indicando que precisa ser implementado
-            return BadRequest(new ApiResponse<object>
-            {
-                Success = false,
-                Message = "Busca com filtros múltiplos ainda não implementada",
-                Errors = new List<string> { "Use os endpoints específicos para busca" }
-            });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error searching audit logs");
+            _logger.LogError(ex, "Error getting audit logs for CPF {Cpf}", cpf);
             return StatusCode(500, new ApiResponse<object>
             {
                 Success = false,
@@ -273,8 +100,7 @@ public class AuditController : ControllerBase
             ChangedAt = auditLog.ChangedAt,
             ChangedBy = auditLog.ChangedBy,
             IpAddress = auditLog.IpAddress,
-            UserAgent = auditLog.UserAgent,
-            Description = null // Description não existe no modelo atual
+            UserAgent = auditLog.UserAgent
         };
     }
 }

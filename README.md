@@ -34,9 +34,11 @@ O CadPlus ERP é comercializado por módulos independentes, sendo o módulo de c
 - **Rastreabilidade**: Log completo de todas as alterações realizadas
 - **Histórico detalhado**: Registro "de → para" de cada campo modificado
 - **Compliance**: Auditoria preparada para normas regulamentárias
-- **Busca avançada**: Filtros por usuário, entidade, período e campo
-- **API dedicada**: Endpoints específicos para consulta de logs
+- **Busca por CPF**: Filtro específico por CPF do usuário
+- **Ordenação inteligente**: Por período decrescente e por ação
+- **API dedicada**: Endpoint específico para consulta de logs
 - **Paginação**: Navegação eficiente em grandes volumes de dados
+- **Logs automáticos**: Criação automática de logs em todas as operações
 
 ## 🛠️ Stack Tecnológica
 
@@ -456,29 +458,34 @@ Authorization: Bearer {token}
 
 ### 📊 Auditoria e Logs
 
-#### Buscar logs por usuário
+#### Buscar logs por CPF do usuário
 ```http
-GET /api/audit/user/{userId}?page=1&limit=20
+GET /api/audit/cpf/{cpf}?page=1&limit=20
 Authorization: Bearer {token}
 ```
 
-#### Buscar logs por entidade
-```http
-GET /api/audit/entity/{entityType}/{entityId}?page=1&limit=20
-Authorization: Bearer {token}
+**Parâmetros:**
+- `cpf` (obrigatório): CPF do usuário
+- `page` (opcional): Página (padrão: 1)
+- `limit` (opcional): Limite por página (padrão: 20)
+
+**Funcionalidades:**
+- ✅ Busca logs de auditoria por CPF do usuário
+- ✅ Ordenação por período decrescente (mais recentes primeiro)
+- ✅ Ordenação secundária por ação (campo alterado)
+- ✅ Paginação para grandes volumes de dados
+- ✅ Logs automáticos em todas as operações
+
+**Exemplo de uso:**
+```bash
+# Buscar logs de um usuário específico por CPF
+GET /api/audit/cpf/12345678901?page=1&limit=20
 ```
 
-#### Buscar logs por período
-```http
-GET /api/audit/period?startDate=2025-01-01&endDate=2025-12-31&page=1&limit=20
-Authorization: Bearer {token}
-```
-
-#### Buscar logs por campo/ação
-```http
-GET /api/audit/action/{fieldName}?page=1&limit=20
-Authorization: Bearer {token}
-```
+**Logs automáticos capturam:**
+- **Usuários**: Alterações em FirstName, LastName, Email, Phone, Password
+- **Endereços**: Criação, atualização, exclusão e definição como principal
+- **Metadados**: IP, User Agent, timestamp e usuário responsável
 
 **Exemplo de resposta:**
 ```json

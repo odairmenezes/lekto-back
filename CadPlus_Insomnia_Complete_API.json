@@ -1,7 +1,7 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2025-10-04T18:52:00.000Z",
+  "__export_date": "2025-10-04T20:00:00.000Z",
   "__export_source": "insomnia.desktop.app:v2023.5.8",
   "resources": [
     {
@@ -266,173 +266,20 @@
       "_type": "request"
     },
     {
-      "_id": "req_audit_user",
+      "_id": "req_audit_cpf",
       "parentId": "fld_audit",
       "modified": 1735344000000,
       "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/audit/user/{userId}?page=1&limit=20",
-      "name": "👤 Logs por Usuário",
-      "description": "Buscar logs de auditoria por usuário",
+      "url": "{{ _.base_url }}/api/audit/cpf/{cpf}?page=1&limit=20",
+      "name": "🔍 Logs por CPF",
+      "description": "Buscar logs de auditoria por CPF do usuário com ordenação automática",
       "method": "GET",
       "body": {},
       "parameters": [
         {
-          "name": "userId",
-          "value": "cb18c50e-4e6f-49cb-8dd2-35f8156b85ef",
-          "description": "ID do usuário",
-          "disabled": false
-        },
-        {
-          "name": "page",
-          "value": "1",
-          "description": "Página",
-          "disabled": false
-        },
-        {
-          "name": "limit",
-          "value": "20",
-          "description": "Limite por página",
-          "disabled": false
-        }
-      ],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_audit_entity",
-      "parentId": "fld_audit",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/audit/entity/{entityType}/{entityId}?page=1&limit=20",
-      "name": "📋 Logs por Entidade",
-      "description": "Buscar logs de auditoria por entidade",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "name": "entityType",
-          "value": "User",
-          "description": "Tipo da entidade (User, Address)",
-          "disabled": false
-        },
-        {
-          "name": "entityId",
-          "value": "cb18c50e-4e6f-49cb-8dd2-35f8156b85ef",
-          "description": "ID da entidade",
-          "disabled": false
-        },
-        {
-          "name": "page",
-          "value": "1",
-          "description": "Página",
-          "disabled": false
-        },
-        {
-          "name": "limit",
-          "value": "20",
-          "description": "Limite por página",
-          "disabled": false
-        }
-      ],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_audit_period",
-      "parentId": "fld_audit",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/audit/period?startDate=2025-01-01&endDate=2025-12-31&page=1&limit=20",
-      "name": "📅 Logs por Período",
-      "description": "Buscar logs de auditoria por período",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "name": "startDate",
-          "value": "2025-01-01",
-          "description": "Data inicial (YYYY-MM-DD)",
-          "disabled": false
-        },
-        {
-          "name": "endDate",
-          "value": "2025-12-31",
-          "description": "Data final (YYYY-MM-DD)",
-          "disabled": false
-        },
-        {
-          "name": "page",
-          "value": "1",
-          "description": "Página",
-          "disabled": false
-        },
-        {
-          "name": "limit",
-          "value": "20",
-          "description": "Limite por página",
-          "disabled": false
-        }
-      ],
-      "headers": [
-        {
-          "name": "Authorization",
-          "value": "Bearer {{ _.auth_token }}"
-        }
-      ],
-      "authentication": {},
-      "metaSortKey": -1735344000000,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "req_audit_action",
-      "parentId": "fld_audit",
-      "modified": 1735344000000,
-      "created": 1735344000000,
-      "url": "{{ _.base_url }}/api/audit/action/{fieldName}?page=1&limit=20",
-      "name": "🔍 Logs por Campo",
-      "description": "Buscar logs de auditoria por campo/ação",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "name": "fieldName",
-          "value": "FirstName",
-          "description": "Nome do campo (FirstName, Email, Phone, etc.)",
+          "name": "cpf",
+          "value": "12345678901",
+          "description": "CPF do usuário",
           "disabled": false
         },
         {
@@ -576,7 +423,7 @@
       "modified": 1735344000000,
       "created": 1735344000000,
       "name": "📊 Auditoria",
-      "description": "Logs de auditoria e rastreabilidade",
+      "description": "Logs de auditoria automáticos com busca por CPF",
       "environment": {},
       "environmentPropertyOrder": null,
       "metaSortKey": -1735344000000,
@@ -600,7 +447,7 @@
       "modified": 1735344000000,
       "created": 1735344000000,
       "name": "🚀 CadPlus ERP - API Completa",
-      "description": "API REST completa do CadPlus ERP com sistema de auditoria",
+      "description": "API REST completa do CadPlus ERP com sistema de auditoria automático",
       "scope": "collection",
       "_type": "workspace"
     },

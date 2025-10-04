@@ -5,6 +5,7 @@ using FluentValidation;
 using CadPlus.Data;
 using CadPlus.DTOs;
 using CadPlus.Models;
+using CadPlus.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace CadPlus.Controllers;
@@ -22,17 +23,20 @@ public class AddressesController : ControllerBase
     private readonly ILogger<AddressesController> _logger;
     private readonly IValidator<CreateAddressDto> _createAddressValidator;
     private readonly IValidator<UpdateAddressDto> _updateAddressValidator;
+    private readonly IAuditService _auditService;
 
     public AddressesController(
         CadPlusDbContext context, 
         ILogger<AddressesController> logger,
         IValidator<CreateAddressDto> createAddressValidator,
-        IValidator<UpdateAddressDto> updateAddressValidator)
+        IValidator<UpdateAddressDto> updateAddressValidator,
+        IAuditService auditService)
     {
         _context = context;
         _logger = logger;
         _createAddressValidator = createAddressValidator;
         _updateAddressValidator = updateAddressValidator;
+        _auditService = auditService;
     }
 
     /// <summary>
@@ -248,6 +252,18 @@ public class AddressesController : ControllerBase
             _context.Addresses.Add(address);
             await _context.SaveChangesAsync();
 
+            // Registrar log de auditoria para criação de endereço
+            await _auditService.LogChangeAsync(
+                userId,
+                "Address",
+                address.Id,
+                "Created",
+                null,
+                $"Endereço criado: {address.Street}, {address.Number}, {address.City}",
+                HttpContext.Connection.RemoteIpAddress?.ToString(),
+                HttpContext.Request.Headers["User-Agent"].ToString()
+            );
+
             var addressDto = new AddressDto
             {
                 Id = address.Id,
@@ -431,6 +447,18 @@ public class AddressesController : ControllerBase
             {
                 await _context.SaveChangesAsync();
                 
+                // Registrar log de auditoria para atualização de endereço
+                await _auditService.LogChangeAsync(
+                    address.UserId,
+                    "Address",
+                    address.Id,
+                    "Updated",
+                    "Endereço anterior",
+                    $"Endereço atualizado: {address.Street}, {address.Number}, {address.City}",
+                    HttpContext.Connection.RemoteIpAddress?.ToString(),
+                    HttpContext.Request.Headers["User-Agent"].ToString()
+                );
+                
                 stopwatch.Stop();
                 _logger.LogInformation("UpdateAddressSuccess - Endereço atualizado com sucesso - ID: {AddressId}, Duration: {Duration}ms", 
                     id, stopwatch.ElapsedMilliseconds);
@@ -538,6 +566,18 @@ public class AddressesController : ControllerBase
             _context.Addresses.Remove(address);
             await _context.SaveChangesAsync();
 
+            // Registrar log de auditoria para exclusão de endereço
+            await _auditService.LogChangeAsync(
+                address.UserId,
+                "Address",
+                address.Id,
+                "Deleted",
+                $"Endereço: {address.Street}, {address.Number}, {address.City}",
+                null,
+                HttpContext.Connection.RemoteIpAddress?.ToString(),
+                HttpContext.Request.Headers["User-Agent"].ToString()
+            );
+
             stopwatch.Stop();
             _logger.LogInformation("DeleteAddressSuccess - Endereço deletado com sucesso - ID: {AddressId}, Duration: {Duration}ms", 
                 id, stopwatch.ElapsedMilliseconds);
@@ -596,6 +636,18 @@ public class AddressesController : ControllerBase
             // Definir este endereço como principal
             address.IsPrimary = true;
             await _context.SaveChangesAsync();
+
+            // Registrar log de auditoria para definir endereço como principal
+            await _auditService.LogChangeAsync(
+                address.UserId,
+                "Address",
+                address.Id,
+                "SetPrimary",
+                "Endereço secundário",
+                "Endereço definido como principal",
+                HttpContext.Connection.RemoteIpAddress?.ToString(),
+                HttpContext.Request.Headers["User-Agent"].ToString()
+            );
 
             _logger.LogInformation("Endereço definido como principal com sucesso - ID: {AddressId}", id);
 

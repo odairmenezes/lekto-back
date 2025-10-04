@@ -27,8 +27,8 @@ public class AuditService : IAuditService
     {
         try
         {
-            // Só registra se houve mudança real
-            if (oldValue == newValue)
+            // Só registra se houve mudança real (mas permite criação com oldValue null)
+            if (oldValue != null && oldValue == newValue)
                 return;
 
             var auditLog = new AuditLog
@@ -108,70 +108,21 @@ public class AuditService : IAuditService
     }
 
     /// <summary>
-    /// Busca logs de auditoria por usuário
+    /// Busca logs de auditoria por CPF do usuário
     /// </summary>
-    public async Task<(List<AuditLog> logs, int totalCount)> GetLogsByUserAsync(Guid userId, int page = 1, int limit = 20)
+    public async Task<(List<AuditLog> logs, int totalCount)> GetLogsByCpfAsync(string cpf, int page = 1, int limit = 20)
     {
+        _logger.LogInformation("Buscando logs de auditoria por CPF: {Cpf}", cpf);
+
         var query = _context.AuditLogs
-            .Where(a => a.UserId == userId)
-            .OrderByDescending(a => a.ChangedAt);
+            .Include(a => a.User)
+            .Where(a => a.User.Cpf == cpf);
 
         var totalCount = await query.CountAsync();
+
         var logs = await query
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        return (logs, totalCount);
-    }
-
-    /// <summary>
-    /// Busca logs de auditoria por entidade
-    /// </summary>
-    public async Task<(List<AuditLog> logs, int totalCount)> GetLogsByEntityAsync(string entityType, Guid entityId, int page = 1, int limit = 20)
-    {
-        var query = _context.AuditLogs
-            .Where(a => a.EntityType == entityType && a.EntityId == entityId)
-            .OrderByDescending(a => a.ChangedAt);
-
-        var totalCount = await query.CountAsync();
-        var logs = await query
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        return (logs, totalCount);
-    }
-
-    /// <summary>
-    /// Busca logs de auditoria por período
-    /// </summary>
-    public async Task<(List<AuditLog> logs, int totalCount)> GetLogsByPeriodAsync(DateTime startDate, DateTime endDate, int page = 1, int limit = 20)
-    {
-        var query = _context.AuditLogs
-            .Where(a => a.ChangedAt >= startDate && a.ChangedAt <= endDate)
-            .OrderByDescending(a => a.ChangedAt);
-
-        var totalCount = await query.CountAsync();
-        var logs = await query
-            .Skip((page - 1) * limit)
-            .Take(limit)
-            .ToListAsync();
-
-        return (logs, totalCount);
-    }
-
-    /// <summary>
-    /// Busca logs de auditoria por ação
-    /// </summary>
-    public async Task<(List<AuditLog> logs, int totalCount)> GetLogsByActionAsync(string fieldName, int page = 1, int limit = 20)
-    {
-        var query = _context.AuditLogs
-            .Where(a => a.FieldName == fieldName)
-            .OrderByDescending(a => a.ChangedAt);
-
-        var totalCount = await query.CountAsync();
-        var logs = await query
+            .OrderByDescending(a => a.ChangedAt)
+            .ThenBy(a => a.FieldName)
             .Skip((page - 1) * limit)
             .Take(limit)
             .ToListAsync();

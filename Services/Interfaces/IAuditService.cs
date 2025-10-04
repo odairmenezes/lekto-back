@@ -35,36 +35,10 @@ public interface IAuditService
         string? ipAddress = null, string? userAgent = null);
 
     /// <summary>
-    /// Busca logs de auditoria por usuário
+    /// Busca logs de auditoria por CPF do usuário
     /// </summary>
-    /// <param name="userId">ID do usuário</param>
+    /// <param name="cpf">CPF do usuário</param>
     /// <param name="page">Página</param>
     /// <param name="limit">Limite por página</param>
-    Task<(List<AuditLog> logs, int totalCount)> GetLogsByUserAsync(Guid userId, int page = 1, int limit = 20);
-
-    /// <summary>
-    /// Busca logs de auditoria por entidade
-    /// </summary>
-    /// <param name="entityType">Tipo da entidade</param>
-    /// <param name="entityId">ID da entidade</param>
-    /// <param name="page">Página</param>
-    /// <param name="limit">Limite por página</param>
-    Task<(List<AuditLog> logs, int totalCount)> GetLogsByEntityAsync(string entityType, Guid entityId, int page = 1, int limit = 20);
-
-    /// <summary>
-    /// Busca logs de auditoria por período
-    /// </summary>
-    /// <param name="startDate">Data inicial</param>
-    /// <param name="endDate">Data final</param>
-    /// <param name="page">Página</param>
-    /// <param name="limit">Limite por página</param>
-    Task<(List<AuditLog> logs, int totalCount)> GetLogsByPeriodAsync(DateTime startDate, DateTime endDate, int page = 1, int limit = 20);
-
-    /// <summary>
-    /// Busca logs de auditoria por ação
-    /// </summary>
-    /// <param name="fieldName">Nome do campo alterado</param>
-    /// <param name="page">Página</param>
-    /// <param name="limit">Limite por página</param>
-    Task<(List<AuditLog> logs, int totalCount)> GetLogsByActionAsync(string fieldName, int page = 1, int limit = 20);
+    Task<(List<AuditLog> logs, int totalCount)> GetLogsByCpfAsync(string cpf, int page = 1, int limit = 20);
 }
