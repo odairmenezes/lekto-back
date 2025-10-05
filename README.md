@@ -275,7 +275,7 @@ A API estará disponível nas seguintes URLs (ajuste a porta conforme sua config
 - **🔗 API Base**: `http://localhost:7001/api` - Endpoints REST
 - **📋 OpenAPI Spec**: `http://localhost:7001/openapi/v1.json` - Especificação OpenAPI
 
-**💡 Importante:** Se você alterou a porta no arquivo `.env` ou usando `./run-api.sh [porta]`, substitua `7001` pela porta configurada.
+**💡 Importante:** Se você alterou a porta usando variáveis de ambiente ou `./run-api.sh [porta]`, substitua `7001` pela porta configurada.
 
 ## ⚙️ Configuração Avançada
 
@@ -316,53 +316,31 @@ dotnet run
 ./run-api.sh 8080
 ```
 
-#### Configuração por Arquivo .env
-
-O arquivo `.env` é carregado automaticamente e contém:
-
-```bash
-# Configurações da API
-API_PORT=7001
-API_URL=http://localhost:7001
-
-# Configurações do banco
-DATABASE_CONNECTION_STRING=Data Source=./data/CadPlusDb_Dev.db
-DATABASE_NAME=CadPlusDb_Dev
-
-# Configurações de segurança JWT
-JWT_SECRET_KEY=CadPlus_Super_Secret_Key_Minimum_256_Bits_For_Security
-JWT_ISSUER=CadPlusERP
-JWT_AUDIENCE=CadPlusFrontend
-
-# Outras configurações...
-```
-
 #### 💡 Debug de Configuração
 
-A aplicação mostra automaticamente qual configuração está sendo usada:
+A aplicação usa o sistema nativo de configuração do .NET:
 
 ```bash
-# Quando usa .env
-✓ Arquivo .env carregado com sucesso de: /path/to/.env
-  📍 API_PORT: 7001
-  🌐 API_URL: http://localhost:7001
+# Verificar configurações carregadas
+dotnet run --verbosity detailed
 
-# Quando usa variáveis de sistema (sobresscreve .env)
-✓ Usando variáveis de ambiente do sistema (sobrescrevendo .env)
-  📍 API_PORT: 8080
-  🌐 API_URL: http://localhost:8080
+# Verificar variáveis de ambiente
+env | grep -E "(ConnectionStrings__|JwtSettings__|ASPNETCORE_)"
+
+# Testar com configuração específica
+ASPNETCORE_ENVIRONMENT=Development dotnet run
 ```
 
 ### 🐳 Docker com Variáveis de Ambiente
 
 ```bash
-# Usar arquivo .env com Docker
+# Usar variáveis de ambiente com Docker
 docker-compose up --build
 
 # Definir variáveis específicas
-API_PORT=9000 docker-compose up --build
+ConnectionStrings__DefaultConnection="Data Source=./data/CadPlusDb_Dev.db" docker-compose up --build
 
-# Usar arquivo .env diferente
+# Usar arquivo de ambiente específico
 env --file .env.production docker-compose up --build
 ```
 
@@ -374,7 +352,7 @@ env --file .env.production docker-compose up --build
 # Verificar configurações
 ./run-api.sh --check
 
-# Executar na porta padrão (.env)
+# Executar na porta padrão (appsettings)
 ./run-api.sh
 
 # Executar em porta específica
@@ -592,10 +570,10 @@ Antes de executar a aplicação, é recomendável verificar se todas as configur
   CadPlus ERP - Sistema Hospitalar
 =================================
 🔍 Verificando configurações...
-✓ Arquivo .env encontrado
-✓ API_PORT configurado no .env
-✓ DATABASE_CONNECTION_STRING configurado
-✓ JWT_SECRET_KEY configurado
+✓ appsettings.json encontrado
+✓ appsettings.Development.json encontrado
+✓ ConnectionStrings configurado
+✓ JwtSettings configurado
 ✓ .NET SDK instalado
 Versão: 9.0.305
 ✅ Todas as configurações estão corretas!
@@ -749,13 +727,13 @@ Este projeto está licenciado sob a **Licença MIT** - veja o arquivo `LICENSE` 
 
 ### Problemas Comuns
 
-#### ❌ "Arquivo .env não encontrado"
+#### ❌ "Arquivo de configuração não encontrado"
 ```bash
-# Solução: Copiar o template
-cp .env.example .env
+# Solução: Verificar se appsettings.json existe
+ls -la appsettings*.json
 
-# Verificar se foi criado
-ls -la .env
+# Se não existir, restaurar do git
+git checkout appsettings.json appsettings.Development.json
 ```
 
 #### ❌ "Porta já está em uso"
@@ -767,25 +745,25 @@ ls -la .env
 lsof -ti:7001 | xargs -r kill -9
 ```
 
-#### ❌ "Variáveis não estão sendo carregadas"
+#### ❌ "Configurações não estão sendo carregadas"
 
-Verifique se o arquivo `.env` está na raiz do projeto:
+Verifique se os arquivos de configuração estão na raiz do projeto:
 ```bash
 # Verificar localização
 pwd
-ls -la .env
+ls -la appsettings*.json
 
-# Teste manual de carregamento
-cat .env | grep API_PORT
+# Teste manual de configuração
+dotnet run --verbosity detailed
 ```
 
-#### ❌ "Configurações misturadas (.env + variáveis de sistema)"
+#### ❌ "Configurações misturadas (appsettings + variáveis de sistema)"
 
-A aplicação prioriza variáveis de sistema sobre `.env`. Para usar apenas `.env`:
+A aplicação prioriza variáveis de ambiente sobre appsettings. Para usar apenas appsettings:
 
 ```bash
 # Limpar variáveis de ambiente
-unset API_PORT API_URL
+unset ConnectionStrings__DefaultConnection JwtSettings__SecretKey
 
 # Execute normalmente
 dotnet run
@@ -795,10 +773,10 @@ dotnet run
 
 ```bash
 # Ver exatamente quais variáveis estão definidas
-env | grep -E "(API_|DATABASE_|JWT_)"
+env | grep -E "(ConnectionStrings__|JwtSettings__|ASPNETCORE_)"
 
 # Testar com verbose
-API_PORT=8888 dotnet run --verbosity detailed
+ASPNETCORE_ENVIRONMENT=Development dotnet run --verbosity detailed
 
 # Verificar logs de debug
 dotnet run 2>&1 | grep -E "(✓|⚠|📍|🌐)"
@@ -808,9 +786,9 @@ dotnet run 2>&1 | grep -E "(✓|⚠|📍|🌐)"
 
 | Condição | Status | Ação |
 |----------|--------|------|
-| `.env` existe + sem variáveis de sistema | ✅ Usa `.env` | Execute `dotnet run` |
-| `.env` existe + variáveis de sistema definidas | ⚡ Usa variáveis de sistema | Execute `export VAR=value && dotnet run` |
-| Sem `.env` + sem variáveis | ❌ Erro | Execute `cp .env.example .env` |
+| `appsettings.json` existe + sem variáveis de sistema | ✅ Usa `appsettings.json` | Execute `dotnet run` |
+| `appsettings.json` existe + variáveis de sistema definidas | ⚡ Usa variáveis de sistema | Execute `export VAR=value && dotnet run` |
+| Sem `appsettings.json` + sem variáveis | ❌ Erro | Execute `git checkout appsettings.json` |
 | Verificação `--check` falha | 🔧 Problema de configuração | Corrija conforme output do check |
 
 🏥 **Especialização hospitalar** - Validações específicas para ambientes de saúde  
