@@ -13,28 +13,9 @@ using CadPlus.Validators;
 using CadPlus.Mappings;
 using AutoMapper;
 using Serilog.Events;
-using CadPlus.Extensions;
 
-// IMPORTANTE: Carregar .env ANTES de qualquer outra coisa
-EnvironmentExtensions.LoadEnvironmentFile();
-
-// Configurar porta da aplicação
-var port = EnvironmentExtensions.GetEnvironmentVariableOrDefault("API_PORT", "7001");
-var url = EnvironmentExtensions.GetEnvironmentVariableOrDefault("API_URL", "http://localhost:7001");
-
-// Configurar argumentos para incluir URLs
-var argsWithUrls = new[] { $"--urls={url}" };
-var builder = WebApplication.CreateBuilder(argsWithUrls);
-
-// Configurar HTTPS redirection para false em desenvolvimento
-if (!builder.Environment.IsProduction())
-{
-    builder.Services.AddHttpsRedirection(options =>
-    {
-        options.RedirectStatusCode = Microsoft.AspNetCore.Http.StatusCodes.Status308PermanentRedirect;
-        options.HttpsPort = null;
-    });
-}
+// Criar builder da aplicação
+var builder = WebApplication.CreateBuilder(args);
 
 // Configurar Serilog
 Log.Logger = new LoggerConfiguration()
@@ -46,10 +27,16 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 // Registrar serviços adicionais necessários para controllers
-// JWT Configuration - usando variáveis de ambiente
-var jwtSecret = EnvironmentExtensions.GetEnvironmentVariableOrDefault("JWT_SECRET_KEY", "CadPlus_Super_Secret_Key_Minimum_256_Bits_Development_Only_Safe_Key_12345678");
-var jwtIssuer = EnvironmentExtensions.GetEnvironmentVariableOrDefault("JWT_ISSUER", "CadPlusERP");
-var jwtAudience = EnvironmentExtensions.GetEnvironmentVariableOrDefault("JWT_AUDIENCE", "CadPlusFrontend");
+// JWT Configuration - usando configuração nativa do .NET
+var jwtSecret = builder.Configuration["JwtSettings:SecretKey"] ?? 
+                Environment.GetEnvironmentVariable("JwtSettings__SecretKey") ?? 
+                "CadPlus_Super_Secret_Key_Minimum_256_Bits_Development_Only_Safe_Key_12345678";
+var jwtIssuer = builder.Configuration["JwtSettings:Issuer"] ?? 
+                Environment.GetEnvironmentVariable("JwtSettings__Issuer") ?? 
+                "CadPlusERP";
+var jwtAudience = builder.Configuration["JwtSettings:Audience"] ?? 
+                  Environment.GetEnvironmentVariable("JwtSettings__Audience") ?? 
+                  "CadPlusFrontend";
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -67,11 +54,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Configuração de CORS
-var allowedOrigins = EnvironmentExtensions.GetEnvironmentVariableOrDefault("ALLOWED_ORIGINS", "*");
-var corsOrigins = allowedOrigins.Split(",", StringSplitOptions.RemoveEmptyEntries)
-                    .Select(origin => origin.Trim())
-                    .ToArray();
+// Configuração de CORS - usando configuração nativa do .NET
+var corsOrigins = builder.Configuration.GetSection("CorsSettings:AllowedOrigins").Get<string[]>() ?? 
+                 Environment.GetEnvironmentVariable("CorsSettings__AllowedOrigins")?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? 
+                 new[] { "*" };
 
 builder.Services.AddCors(options =>
 {
@@ -170,12 +156,12 @@ app.MapGet("/", () => Results.Ok(new {
 }));
 
 Log.Information("🚀 Cad+ ERP API iniciada!");
-Log.Information($"📖 API Status: {url}/health");
-Log.Information($"📊 Base URL: {url}/");
+Log.Information($"📖 API Status: {builder.Configuration["ApiSettings:Url"] ?? "http://localhost:7001"}/health");
+Log.Information($"📊 Base URL: {builder.Configuration["ApiSettings:Url"] ?? "http://localhost:7001"}/");
 
 try
 {
-    app.Run(url);
+    app.Run();
 }
 catch (Exception ex)
 {

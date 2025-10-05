@@ -149,33 +149,65 @@ cd lelklto
 dotnet restore
 ```
 
-#### 3. **Configurar Variáveis de Ambiente**
+#### 3. **Configurar Variáveis de Ambiente (.NET)**
 
-Copie o arquivo de template e configure suas variáveis:
+O projeto usa as convenções padrão do .NET para configuração. Você pode configurar de três formas:
 
-```bash
-# Copiar template de configuração
-cp .env.example .env
+##### **Opção A: Arquivos de Configuração (Recomendado para Desenvolvimento)**
 
-# Editar configurações (opcional)
-nano .env
+Os arquivos `appsettings.json` e `appsettings.Development.json` já estão configurados:
+
+```json
+// appsettings.Development.json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Data Source=./data/CadPlusDb_Dev.db"
+  },
+  "JwtSettings": {
+    "SecretKey": "CadPlus_Super_Secret_Key_Minimum_256_Bits_For_Development_Only_Dev_Environment_Super_Safe",
+    "Issuer": "CadPlusERP-Dev",
+    "Audience": "CadPlusFrontend-Dev"
+  },
+  "ApiSettings": {
+    "Port": 7001,
+    "Url": "http://127.0.0.1:7001"
+  }
+}
 ```
 
-Principais configurações no arquivo `.env`:
+##### **Opção B: User Secrets (Desenvolvimento Local)**
+
+Para desenvolvimento local, use User Secrets (recomendado pela Microsoft):
 
 ```bash
-# 🔧 Configurações da API
-API_PORT=7001
-API_URL=http://localhost:7001
+# Inicializar User Secrets
+dotnet user-secrets init
 
-# 🗄️ Configurações do Banco de Dados
-DATABASE_CONNECTION_STRING=Data Source=./data/CadPlusDb_Dev.db
-DATABASE_NAME=CadPlusDb_Dev
+# Configurar conexão do banco
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Data Source=./data/CadPlusDb_Dev.db"
 
-# 🔐 Configurações de Segurança
-JWT_SECRET_KEY=CadPlus_Super_Secret_Key_Minimum_256_Bits_For_Security
-JWT_ISSUER=CadPlusERP
-JWT_AUDIENCE=CadPlusFrontend
+# Configurar JWT
+dotnet user-secrets set "JwtSettings:SecretKey" "sua-chave-super-secreta-aqui"
+dotnet user-secrets set "JwtSettings:Issuer" "CadPlusERP"
+dotnet user-secrets set "JwtSettings:Audience" "CadPlusFrontend"
+```
+
+##### **Opção C: Variáveis de Ambiente (Produção)**
+
+Para produção, use variáveis de ambiente com prefixos .NET:
+
+```bash
+# Configurações de conexão
+export ConnectionStrings__DefaultConnection="Server=prod-server;Database=CadPlusProd"
+
+# Configurações JWT
+export JwtSettings__SecretKey="chave-super-secreta-producao"
+export JwtSettings__Issuer="CadPlusERP-Prod"
+export JwtSettings__Audience="CadPlusFrontend-Prod"
+
+# Configurações da API
+export ASPNETCORE_ENVIRONMENT=Production
+export ASPNETCORE_URLS=http://localhost:7001
 ```
 
 #### 4. **Verificar Configurações**
@@ -247,13 +279,30 @@ A API estará disponível nas seguintes URLs (ajuste a porta conforme sua config
 
 ## ⚙️ Configuração Avançada
 
-### 🔧 Gerenciamento de Variáveis de Ambiente
+### 🔧 Gerenciamento de Configuração (.NET)
 
-A API CadPlus ERP usa um sistema inteligente de configuração que respeita a seguinte ordem de prioridade:
+A API CadPlus ERP usa o sistema nativo de configuração do .NET que respeita a seguinte ordem de prioridade:
 
-1. **Variáveis de ambiente do sistema** (maior prioridade)
-2. **Arquivo `.env`** (configuração padrão)
-3. **Valores hardcoded** (fallback)
+1. **Variáveis de ambiente** (maior prioridade)
+2. **User Secrets** (desenvolvimento local)
+3. **appsettings.{Environment}.json** (ambiente específico)
+4. **appsettings.json** (configuração base)
+5. **Valores padrão** (fallback)
+
+### 📋 Hierarquia de Configuração
+
+```bash
+# 1. Variáveis de ambiente (produção)
+export ConnectionStrings__DefaultConnection="Server=prod;Database=CadPlusProd"
+export JwtSettings__SecretKey="chave-producao-super-secreta"
+
+# 2. User Secrets (desenvolvimento)
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Data Source=./data/CadPlusDb_Dev.db"
+
+# 3. appsettings.Development.json (desenvolvimento)
+# 4. appsettings.json (base)
+# 5. Valores padrão no código
+```
 
 #### Configuração por Variáveis de Ambiente
 

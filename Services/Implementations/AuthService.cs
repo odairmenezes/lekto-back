@@ -5,7 +5,7 @@ using System.Text;
 using CadPlus.Services;
 using CadPlus.Models;
 using CadPlus.DTOs;
-using CadPlus.Extensions;
+using Microsoft.Extensions.Configuration;
 
 namespace CadPlus.Services.Implementations;
 
@@ -17,8 +17,9 @@ public class AuthService : IAuthService
     private readonly ICpfValidationService _cpfValidationService;
     private readonly IPasswordService _passwordService;
     private readonly IUserService _userService;
+    private readonly IConfiguration _configuration;
     
-    // JWT Settings - Usando configurações de ambiente
+    // JWT Settings - Usando configurações nativas do .NET
     private readonly string _jwtSecret;
     private readonly string _jwtIssuer;
     private readonly string _jwtAudience;
@@ -26,16 +27,24 @@ public class AuthService : IAuthService
     public AuthService(
         ICpfValidationService cpfValidationService,
         IPasswordService passwordService,
-        IUserService userService)
+        IUserService userService,
+        IConfiguration configuration)
     {
         _cpfValidationService = cpfValidationService;
         _passwordService = passwordService;
         _userService = userService;
+        _configuration = configuration;
         
-        // Carregar configurações JWT do ambiente
-        _jwtSecret = EnvironmentExtensions.GetEnvironmentVariableOrDefault("JWT_SECRET_KEY", "CadPlus_Super_Secret_Key_Minimum_256_Bits_Development_Only_Safe_Key_12345678");
-        _jwtIssuer = EnvironmentExtensions.GetEnvironmentVariableOrDefault("JWT_ISSUER", "CadPlusERP");
-        _jwtAudience = EnvironmentExtensions.GetEnvironmentVariableOrDefault("JWT_AUDIENCE", "CadPlusFrontend");
+        // Carregar configurações JWT usando configuração nativa do .NET
+        _jwtSecret = _configuration["JwtSettings:SecretKey"] ?? 
+                    Environment.GetEnvironmentVariable("JwtSettings__SecretKey") ?? 
+                    "CadPlus_Super_Secret_Key_Minimum_256_Bits_Development_Only_Safe_Key_12345678";
+        _jwtIssuer = _configuration["JwtSettings:Issuer"] ?? 
+                    Environment.GetEnvironmentVariable("JwtSettings__Issuer") ?? 
+                    "CadPlusERP";
+        _jwtAudience = _configuration["JwtSettings:Audience"] ?? 
+                      Environment.GetEnvironmentVariable("JwtSettings__Audience") ?? 
+                      "CadPlusFrontend";
     }
 
     public async Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto)
