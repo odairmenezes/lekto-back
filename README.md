@@ -692,31 +692,6 @@ dotnet run --urls "http://localhost:5000" --environment Production
 - [ ] Deploy em containers (Docker/Kubernetes)
 - [ ] Monitoramento e alertas em produção
 
-## 🤝 Contribuindo
-
-Este projeto foi desenvolvido seguindo as melhores práticas do mercado. Para contribuir:
-
-1. **Fork** o projeto
-2. **Crie** uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
-3. **Commit** suas mudanças (`git commit -m 'feat: adicionar nova funcionalidade'`)
-4. **Push** para a branch (`git push origin feature/nova-funcionalidade`)
-5. **Abra** um Pull Request
-
-### Padrões de Qualidade
-- ✅ **SOLID**: Princípios orientação a objetos seguidos
-- ✅ **Clean Code**: Código limpo e autodocumentado
-- ✅ **Testes**: Cobertura mínima de 80% nos componentes críticos
-- ✅ **Documentação**: README e comentários em código atualizados
-
-## 📞 Suporte
-
-Para questões técnicas ou suporte:
-
-- 📧 **E-mail**: devteam@cadplus.com.br  
-- 📖 **Wiki**: [Documentação completa do projeto]
-- 🐛 **Issues**: [GitHub Issues](https://github.com/seu-usuario/lelklto/issues)
-- 💬 **Discussões**: [GitHub Discussions](https://github.com/seu-usuario/lelklto/discussions)
-
 ## 📄 Licença
 
 Este projeto está licenciado sob a **Licença MIT** - veja o arquivo `LICENSE` para detalhes completos.
